@@ -12,8 +12,8 @@
    - **Member**
      - [ ] See and Modify Project
    - **Student**
-        -[ ] See an invitational message from the lead
-        -[ ] Accept of deny the invitation
+      -[ ] See an invitational message from the lead
+      -[ ] Accept of deny the invitation
 2. **Faculty / Advisor**
    - [ ] See request to be a supervisor
    - [ ] Manage request see/accept/deny
