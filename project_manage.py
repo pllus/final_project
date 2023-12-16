@@ -1,60 +1,43 @@
 # import database module
-import os, csv, random
-from final_project.final_project.database import Table, DB
+
+from database import CSV, Database, Table
+import csv
 
 # define a funcion called initializing
-my_DB = DB()
+DB = Database()
+csv1 = CSV()
 
 def initializing():
-    __location__ = os.path.realpath(
-        os.path.join(os.getcwd(), os.path.dirname(__file__)))
-
-    persons = []
-    with open(os.path.join(__location__, 'persons.csv')) as f:
-        rows = csv.DictReader(f)
-        for r in rows:
-            persons.append(dict(r))
-
-    table1 = Table('persons', persons)
-    my_DB.insert(table1)
-
-# here are things to do in this function:
-
-# create an object to read all csv files that will serve as a persistent state for this program
-
-# create all the corresponding tables for those csv files
-    login = []
-    table_login = Table('login',login)
-
-    for id in table1.table:
-        random_digit = (str(random.randint(0, 9)) + str(random.randint(0, 9))
-                        + str(random.randint(0, 9)) + str(random.randint(0, 9)))
-        role = 'Admin'
-        if id['type'] == 'student':
-            role = 'Member'
-        elif id['type'] == 'faculty':
-            role = 'Faculty'
-        table_login.insert({f'person_id': id['ID'], 'username': id['fist']+'.'+id['last'][0],
-                        'password': random_digit, 'role': role})
-    my_DB.insert(table_login)
-# see the guide how many tables are needed
-
-# add all these tables to the database
+    """
+    here are things to do in this function:
+    create an object to read all csv files that will serve
+    as a persistent state for this program
+    create all the corresponding tables for those csv files
+    see the guide how many tables are needed
+    add all these tables to the database
+    """
+    csv_login = csv1.read_csv('login.csv')
+    csv_person = csv1.read_csv('persons.csv')
+    login_table = Table('login', csv_login)
+    person_table = Table('persons', csv_person)
+    DB.insert(login_table)
+    DB.insert(person_table)
+    for i in csv_login:
+        print(i['username'])
 
 
-# define a funcion called login
+# initializing()
+# define a function called login
 
 def login():
-    data = my_DB.search('login')
-    print(data.table)
-    user = input('Username: ')
-    password = input('Password: ')
-    for i in data.table:
-        print(i["username"], i["password"])
-        if (i['username']) == user and (i['password']) == password:
-            return (i['person_id']), (i['role'])
-        else:
-            return None
+    username = input('Enter Username: ')
+    password = input('Enter Password: ')
+    data_login = DB.database[0].table
+    for each in data_login:
+        if username == each['username'] and password == each['password']:
+            return each['ID'], each['role']
+    else:
+        return None
 
 
 # here are things to do in this function:
@@ -64,7 +47,11 @@ def login():
 
 # define a function called exit
 def exit():
-    pass
+    with open('persons.csv.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow(['ID', 'username', 'password', 'role'])
+        for each in DB.database[0].table:
+            writer.writerow(each.values())
 
 
 # here are things to do in this function:
@@ -78,22 +65,21 @@ def exit():
 
 initializing()
 val = login()
-print(val)
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 
-# if val[1] = 'admin':
-# see and do admin related activities
-# elif val[1] = 'student':
-# see and do student related activities
-# elif val[1] = 'member':
-# see and do member related activities
-# elif val[1] = 'lead':
-# see and do lead related activities
-# elif val[1] = 'faculty':
-# see and do faculty related activities
-# elif val[1] = 'advisor':
-# see and do advisor related activities
+if val[1] == 'admin':
+    pass
+elif val[1] == 'student':
+    pass
+elif val[1] == 'member':
+    pass
+elif val[1] == 'lead':
+    pass
+elif val[1] == 'faculty':
+    pass
+elif val[1] == 'advisor':
+    pass
 
 # once everyhthing is done, make a call to the exit function
 exit()
