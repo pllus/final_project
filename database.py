@@ -1,19 +1,26 @@
 # try wrapping the code below that reads a persons.csv file in a class and make it more general such that it can read in any csv file
 
-import csv, os, copy
+import copy
+import csv
+import os
 
-__location__ = os.path.realpath(
-    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+class CSV:
+    def __init__(self):
+        self.__location__ = os.path.realpath(
+            os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-persons = []
-with open(os.path.join(__location__, 'persons.csv')) as f:
-    rows = csv.DictReader(f)
-    for r in rows:
-        persons.append(dict(r))
-print(persons)
+    def read_csv(self, file_name):
+        table = []
+        with open(os.path.join(self.__location__, file_name)) as f:
+            rows = csv.DictReader(f)
+            for r in rows:
+                table.append(dict(r))
+        return table
+
+csvee = CSV()
 
 # add in code for a Database class
-class DB:
+class Database:
     def __init__(self):
         self.database = []
 
@@ -71,4 +78,5 @@ class Table:
 
     def insert(self, table):
         self.table.append(table)
-# modify the code in the Table class so that it supports the insert operation where an entry can be added to a list of dictionary
+
+#modify the code in the Table class so that it supports the insert operation where an entry can be added to a list of dictionary
