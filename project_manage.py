@@ -8,19 +8,50 @@ import datetime
 DB = Database()
 csv1 = CSV()
 
+
 class Student:
     def __init__(self, id, username, role):
         self.id = id
         self.user = username
         self.role = role
+        self.request_box = []
+        self.run()
+
+    def create_project(self):
+        pass
 
     def see_invite(self):
         pass
+
     def accept_invite(self):
         pass
 
     def deny_invite(self):
         pass
+
+    def run(self):
+        print(self)
+        print()
+        while True:
+            print("--Choose--")
+            print("1. Check inbox.")
+            print("2. Create a project.")
+            print("3. Logout.")
+            choice = int(input("Enter your choice: "))
+            if choice == 1:
+                print()
+                self.check_inbox()
+            elif choice == 2:
+                print()
+                self.create_project()
+            elif choice == 3:
+                break
+            print()
+
+    def __str__(self):
+        return (f"Welcome {self.first} {self.last} to Senior_Project Report."
+                f"{self.type} is your role")
+
 
 
 class Lead(Student):
@@ -34,15 +65,10 @@ class Lead(Student):
         all_project = DB.search('project')
         print(all_project)
 
-
     def sent_invite(self):
-        pass
-
-    def accept_invite(self):
-        pass
-
-    def deny_invite(self):
-        pass
+        name = input('Search: ')
+        if name == DB.search('person'):
+            name.append()
 
     def add_member(self):
         pass
@@ -70,17 +96,21 @@ class Member:
     def modify_project(self):
         pass
 
+
 class Advisor:
     def see_request_supervisor(self):
         pass
+
     def manage_request(self):
         pass
 
     def see_project(self):
         pass
 
+
 class Admin:
     pass
+
 
 class Faculty:
     pass
@@ -108,28 +138,33 @@ def initializing():
     DB.insert(project_table)
 
     csv_advisor = csv1.read_csv('Advisor_pending_request.csv')
-    advisor_table = Table('persons', csv_advisor)
+    advisor_table = Table('advisor', csv_advisor)
     DB.insert(advisor_table)
 
     csv_member = csv1.read_csv('Member_pending_request.csv')
-    member_table = Table('persons', csv_member)
+    member_table = Table('member', csv_member)
     DB.insert(member_table)
 
 
 def login_base():
     print("Welcome to Senior_Project Report Program")
-    data_login = DB.search('login')
-    print(data_login)
-    username = input('Enter Username: ')
-    password = input('Enter Password: ')
-    # data_login = DB.search('login')
-    for each in data_login:
-        if username == each['username'] and password == each['password']:
-            return each['ID'], each['role']
-    else:
-        return None
+    while True:
+        username = input('Enter Username: ')
+        password = input('Enter Password: ')
+        data_login = DB.search('login')
+        for each in data_login.table:
+            if username == each['username'] and password == each['password']:
+                return each['ID'], each['role']
+        else:
+            return None
 
-print(login_base())
+
+def data_person(ID):
+    person = DB.search('person')
+    person_filter = person.filter(lambda x: x['ID'] == ID)
+    return person_filter.table[0]
+
+
 
 # here are things to do in this function:
 # add code that performs a login task
@@ -141,43 +176,41 @@ def exit():
     login = open('login.csv', 'w')
     login_writer = csv.writer(login)
     login_writer.writerow(['ID', 'username', 'password', 'role'])
-    for each in DB.database[0].table:
+    for each in DB.search('login'):
         login_writer.writerow(each.values())
     login.close()
 
     person = open('persons.csv', 'w')
     person_writer = csv.writer(person)
     person_writer.writerow(['ID', 'first', 'last', 'type'])
-    for each in DB.database[1].table:
+    for each in DB.search('person'):
         person_writer.writerow(each.values())
     person.close()
 
     project = open('project.csv', 'w')
     project_writer = csv.writer(project)
     project_writer.writerow(['ProjectID', 'Title', 'Lead', 'Member1', 'Member2', 'Advisor', 'Status'])
-    for each in DB.database[2].table:
+    for each in DB.search('project'):
         person_writer.writerow(each.values())
     person.close()
 
     advisor_pending = open('Advisor_pending_request.csv', 'w')
     advisor_pending_writer = csv.writer(advisor_pending)
     advisor_pending_writer.writerow(['ProjectID', 'Advisor_Request', 'Response', 'Response_date'])
-    for each in DB.database[3].table:
+    for each in DB.search('advisor'):
         person_writer.writerow(each.values())
     person.close()
 
     member_pending = open('member_pending_request.csv', 'w')
     member_pending_writer = csv.writer(member_pending)
     member_pending_writer.writerow(['ProjectID', 'Member_Request', 'Response', 'Response_date'])
-    for each in DB.database[4].table:
+    for each in DB.search('member'):
         person_writer.writerow(each.values())
     person.close()
 
     print('\n Program Exit')
 
 
-def project_id():
-    pass
 
 
 # here are things to do in this function:
@@ -188,24 +221,23 @@ def project_id():
 
 
 # make calls to the initializing and login functions defined above
-print(DB.database)
 initializing()
 val = login_base()
-
+print(data_person(val[0]))
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 
-# if val[1] == 'admin':
-#     pass
-# elif val[1] == 'student':
-#     pass
-# elif val[1] == 'member':
-#     pass
-# elif val[1] == 'lead':
-#     pass
-# elif val[1] == 'faculty':
-#     pass
-# elif val[1] == 'advisor':
-#     pass
+if val[1] == 'admin':
+    admin = Admin()
+elif val[1] == 'student':
+    student = Student()
+elif val[1] == 'member':
+    member = Member()
+elif val[1] == 'lead':
+    lead = Lead()
+elif val[1] == 'faculty':
+    faculty = Faculty()
+elif val[1] == 'advisor':
+    advisor = Advisor()
 
 # once everyhthing is done, make a call to the exit function
-exit()
+# exit()
