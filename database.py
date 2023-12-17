@@ -9,15 +9,14 @@ class CSV:
         self.__location__ = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-    def read_csv(self, file_name):
+    def read_csv(self, csv_name):
         table = []
-        with open(os.path.join(self.__location__, file_name)) as f:
+        with open(os.path.join(self.__location__, csv_name)) as f:
             rows = csv.DictReader(f)
             for r in rows:
                 table.append(dict(r))
         return table
 
-csvee = CSV()
 
 # add in code for a Database class
 class Database:
@@ -33,8 +32,9 @@ class Database:
                 return table
         return None
 
-# add in code for a Table class
+
 class Table:
+    # add in code for a Table class
     def __init__(self, table_name, table):
         self.table_name = table_name
         self.table = table
@@ -78,5 +78,10 @@ class Table:
 
     def insert(self, table):
         self.table.append(table)
+
+    def update_row(self, primary_attribute, primary_attribute_value, update_attribute, update_value):
+        for i in self.table:
+            if i[primary_attribute] == primary_attribute_value:
+                i[update_attribute] = update_value
 
 #modify the code in the Table class so that it supports the insert operation where an entry can be added to a list of dictionary
