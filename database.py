@@ -1,5 +1,6 @@
 # try wrapping the code below that reads a persons.csv file in a class and make it more general such that it can read in any csv file
 
+import pandas as pd
 import copy
 import csv
 import os
