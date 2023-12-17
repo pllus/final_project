@@ -2,10 +2,89 @@
 
 from database import CSV, Database, Table
 import csv
+import datetime
 
 # define a funcion called initializing
 DB = Database()
 csv1 = CSV()
+
+class Student:
+    def __init__(self, id, username, role):
+        self.id = id
+        self.user = username
+        self.role = role
+
+    def see_invite(self):
+        pass
+    def accept_invite(self):
+        pass
+
+    def deny_invite(self):
+        pass
+
+
+class Lead(Student):
+    def __init__(self):
+        pass
+
+    def create_project(self):
+        pass
+
+    def see_project(self):
+        all_project = DB.search('project')
+        print(all_project)
+
+
+    def sent_invite(self):
+        pass
+
+    def accept_invite(self):
+        pass
+
+    def deny_invite(self):
+        pass
+
+    def add_member(self):
+        pass
+
+    def remove_member(self):
+        pass
+
+    def modify_project(self):
+        pass
+
+    def send_request_advisor(self):
+        pass
+
+    def status(self):
+        pass
+
+    def summit(self):
+        pass
+
+
+class Member:
+    def see_project(self):
+        pass
+
+    def modify_project(self):
+        pass
+
+class Advisor:
+    def see_request_supervisor(self):
+        pass
+    def manage_request(self):
+        pass
+
+    def see_project(self):
+        pass
+
+class Admin:
+    pass
+
+class Faculty:
+    pass
+
 
 def initializing():
     """
@@ -17,32 +96,40 @@ def initializing():
     add all these tables to the database
     """
     csv_login = csv1.read_csv('login.csv')
-    csv_person = csv1.read_csv('persons.csv')
-    csv_project = csv1.read_csv('project.csv')
-    csv_advisor = csv1.read_csv('Advisor_pending_request.csv')
-    csv_member = csv1.read_csv('Member_pending_request.csv')
     login_table = Table('login', csv_login)
-    person_table = Table('persons', csv_person)
-    project_table = Table('project', csv_project)
-    advisor_table = Table('persons', csv_advisor)
-    member_table = Table('persons', csv_member)
     DB.insert(login_table)
+
+    csv_person = csv1.read_csv('persons.csv')
+    person_table = Table('persons', csv_person)
     DB.insert(person_table)
+
+    csv_project = csv1.read_csv('project.csv')
+    project_table = Table('project', csv_project)
     DB.insert(project_table)
+
+    csv_advisor = csv1.read_csv('Advisor_pending_request.csv')
+    advisor_table = Table('persons', csv_advisor)
     DB.insert(advisor_table)
+
+    csv_member = csv1.read_csv('Member_pending_request.csv')
+    member_table = Table('persons', csv_member)
     DB.insert(member_table)
 
 
 def login_base():
+    print("Welcome to Senior_Project Report Program")
+    data_login = DB.search('login')
+    print(data_login)
     username = input('Enter Username: ')
     password = input('Enter Password: ')
-    data_login = DB.database[0].table
+    # data_login = DB.search('login')
     for each in data_login:
         if username == each['username'] and password == each['password']:
             return each['ID'], each['role']
     else:
         return None
 
+print(login_base())
 
 # here are things to do in this function:
 # add code that performs a login task
@@ -67,30 +154,31 @@ def exit():
 
     project = open('project.csv', 'w')
     project_writer = csv.writer(project)
-    project_writer.writerow(['ID', 'first', 'last', 'type'])
-    for each in DB.database[1].table:
+    project_writer.writerow(['ProjectID', 'Title', 'Lead', 'Member1', 'Member2', 'Advisor', 'Status'])
+    for each in DB.database[2].table:
         person_writer.writerow(each.values())
     person.close()
 
     advisor_pending = open('Advisor_pending_request.csv', 'w')
     advisor_pending_writer = csv.writer(advisor_pending)
-    advisor_pending_writer.writerow(['ID', 'first', 'last', 'type'])
-    for each in DB.database[1].table:
+    advisor_pending_writer.writerow(['ProjectID', 'Advisor_Request', 'Response', 'Response_date'])
+    for each in DB.database[3].table:
         person_writer.writerow(each.values())
     person.close()
 
     member_pending = open('member_pending_request.csv', 'w')
     member_pending_writer = csv.writer(member_pending)
-    member_pending_writer.writerow(['ID', 'first', 'last', 'type'])
-    for each in DB.database[1].table:
+    member_pending_writer.writerow(['ProjectID', 'Member_Request', 'Response', 'Response_date'])
+    for each in DB.database[4].table:
         person_writer.writerow(each.values())
     person.close()
 
-
     print('\n Program Exit')
+
 
 def project_id():
     pass
+
 
 # here are things to do in this function:
 # write out all the tables that have been modified to the corresponding csv files
@@ -100,7 +188,7 @@ def project_id():
 
 
 # make calls to the initializing and login functions defined above
-
+print(DB.database)
 initializing()
 val = login_base()
 
