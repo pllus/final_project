@@ -10,11 +10,18 @@
      - [ ] Send request messages to advisor
      - [ ] Submit project
    - **Member**
-     - [ ] See and Modify Project
+     - [ ] Modify Project
    - **Student**
       -[ ] See an invitational message from the lead
       -[ ] Accept of deny the invitation
-2. **Faculty / Advisor**
+      -[ ] See Project
+2. **Faculty**
+   - **Normal Faculty**
+   - [ ] See request to be a supervisor
+   - [ ] Manage request see/accept/deny
+   - [ ] See the detail all the project
+   - [ ] Comment on the project
+   - **Advisor**
    - [ ] See request to be a supervisor
    - [ ] Manage request see/accept/deny
    - [ ] See the detail all the project
